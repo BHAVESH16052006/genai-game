@@ -68,7 +68,12 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ onTrackChange }) => {
   };
 
   return (
-    <footer className="h-28 bg-slate-900/80 border-t border-cyan-500/30 px-8 flex items-center gap-10 sticky bottom-0 z-50 backdrop-blur-2xl shadow-[0_-10px_20px_rgba(6,182,212,0.1)]">
+    <footer className="h-28 bg-slate-900/90 px-8 flex items-center gap-10 sticky bottom-0 z-50 backdrop-blur-2xl shadow-[0_-10px_20px_rgba(6,182,212,0.1)] relative">
+      {/* Animated Neon Top Border */}
+      <div className="absolute top-0 left-0 right-0 h-[2px] overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-cyan-400 animate-gradient-x w-[200%] h-full opacity-80"></div>
+      </div>
+      
       <audio
         ref={audioRef}
         src={currentTrack.url}

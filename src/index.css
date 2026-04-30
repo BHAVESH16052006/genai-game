@@ -4,5 +4,15 @@
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  @keyframes gradient-x {
+    0%, 100% {
+      transform: translateX(-25%);
+    }
+    50% {
+      transform: translateX(0%);
+    }
+  }
+  --animate-gradient-x: gradient-x 3s ease infinite;
 }
 

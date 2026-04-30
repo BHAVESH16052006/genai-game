@@ -43,22 +43,10 @@ const SnakeGame: React.FC<SnakeGameProps> = ({ onScoreUpdate, onGameOver, isPlay
       setDirection(currentDir);
 
       switch (currentDir) {
-        case 'UP': newHead.y -= 1; break;
-        case 'DOWN': newHead.y += 1; break;
-        case 'LEFT': newHead.x -= 1; break;
-        case 'RIGHT': newHead.x += 1; break;
-      }
-
-      // Check collision with walls
-      if (
-        newHead.x < 0 || 
-        newHead.x >= GRID_SIZE || 
-        newHead.y < 0 || 
-        newHead.y >= GRID_SIZE
-      ) {
-        onGameOver(score);
-        resetGame();
-        return prevSnake;
+        case 'UP': newHead.y = (newHead.y - 1 + GRID_SIZE) % GRID_SIZE; break;
+        case 'DOWN': newHead.y = (newHead.y + 1) % GRID_SIZE; break;
+        case 'LEFT': newHead.x = (newHead.x - 1 + GRID_SIZE) % GRID_SIZE; break;
+        case 'RIGHT': newHead.x = (newHead.x + 1) % GRID_SIZE; break;
       }
 
       // Check collision with self
@@ -242,14 +230,19 @@ const SnakeGame: React.FC<SnakeGameProps> = ({ onScoreUpdate, onGameOver, isPlay
   return (
     <div className="relative group">
       <div className="absolute -inset-4 bg-cyan-500/10 rounded-[3rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
-      <div className="relative bg-[#0a0a20]/60 rounded-[3rem] p-8 border-4 border-slate-800/80 shadow-2xl backdrop-blur-xl overflow-hidden min-w-[540px]">
-        <canvas
-          ref={canvasRef}
-          width={500}
-          height={500}
-          className="max-w-full aspect-square cursor-pointer rounded-2xl shadow-inner border border-white/5"
-          onClick={() => setIsPaused(p => !p)}
-        />
+      
+      <div className="relative p-[2px] rounded-[3rem] overflow-hidden">
+        {/* Continuous Flowing Neon Border */}
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-cyan-400 animate-gradient-x w-[200%] h-full opacity-60 shadow-[0_0_20px_rgba(6,182,212,0.3)]"></div>
+        
+        <div className="relative bg-[#0a0a20]/95 rounded-[2.9rem] p-8 backdrop-blur-xl overflow-hidden min-w-[540px] flex flex-col items-center">
+          <canvas
+            ref={canvasRef}
+            width={500}
+            height={500}
+            className="max-w-full aspect-square cursor-pointer rounded-2xl shadow-inner border border-white/5"
+            onClick={() => setIsPaused(p => !p)}
+          />
         
         <AnimatePresence>
           {isPaused && (
@@ -260,33 +253,39 @@ const SnakeGame: React.FC<SnakeGameProps> = ({ onScoreUpdate, onGameOver, isPlay
               className="absolute inset-0 flex items-center justify-center bg-[#020617]/90 backdrop-blur-lg"
               onClick={() => setIsPaused(false)}
             >
-              <div className="text-center p-12">
-                <motion.div 
-                  initial={{ scale: 0.8, rotate: -10 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  className="w-24 h-24 bg-gradient-to-br from-cyan-400 to-fuchsia-500 rounded-3xl flex items-center justify-center mb-8 mx-auto shadow-[0_0_40px_rgba(34,211,238,0.3)]"
-                >
-                  <Play className="w-12 h-12 text-white fill-current ml-2" />
-                </motion.div>
-                <h3 className="text-white font-black text-4xl mb-3 tracking-tighter uppercase italic">
-                  Neural Sync
-                </h3>
-                <p className="text-slate-400 text-xs font-mono uppercase tracking-[0.6em] mb-12">
-                  Waiting for bio-link authorization...
-                </p>
-                <button 
-                  onClick={() => setIsPaused(false)}
-                  className="group relative px-12 py-4 overflow-hidden rounded-full font-black text-slate-950 uppercase text-sm tracking-widest transition-all"
-                >
-                  <div className="absolute inset-0 bg-white group-hover:bg-cyan-400 transition-colors"></div>
-                  <span className="relative">Establish Connection</span>
-                </button>
+              <div className="relative p-[2px] rounded-[3rem] overflow-hidden group">
+                {/* Flowing Neon Border Effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-cyan-400 animate-gradient-x w-[200%] h-full opacity-80 shadow-[0_0_30px_rgba(34,211,238,0.4)]"></div>
+                
+                <div className="relative text-center p-12 bg-slate-950 rounded-[2.9rem] flex flex-col items-center">
+                  <motion.div 
+                    initial={{ scale: 0.8, rotate: -10 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    className="w-24 h-24 bg-gradient-to-br from-cyan-400 to-fuchsia-500 rounded-3xl flex items-center justify-center mb-8 shadow-[0_0_40px_rgba(34,211,238,0.3)]"
+                  >
+                    <Play className="w-12 h-12 text-white fill-current ml-2" />
+                  </motion.div>
+                  <h3 className="text-white font-black text-5xl mb-3 tracking-tighter uppercase italic drop-shadow-[0_0_15px_rgba(34,211,238,0.6)]">
+                    NEON BEATS
+                  </h3>
+                  <p className="text-slate-400 text-[10px] font-mono uppercase tracking-[0.6em] mb-12">
+                    Initializing audio-visual link...
+                  </p>
+                  <button 
+                    onClick={() => setIsPaused(false)}
+                    className="group relative px-12 py-4 overflow-hidden rounded-full font-black text-slate-950 uppercase text-sm tracking-widest transition-all"
+                  >
+                    <div className="absolute inset-0 bg-white group-hover:bg-cyan-400 transition-colors"></div>
+                    <span className="relative">Establish Connection</span>
+                  </button>
+                </div>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
     </div>
+  </div>
   );
 };
 
