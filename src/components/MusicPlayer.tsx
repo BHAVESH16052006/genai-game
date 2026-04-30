@@ -68,7 +68,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ onTrackChange }) => {
   };
 
   return (
-    <footer className="h-28 bg-slate-900 border-t border-white/5 px-8 flex items-center gap-10 sticky bottom-0 z-50 backdrop-blur-xl">
+    <footer className="h-28 bg-slate-900/80 border-t border-cyan-500/30 px-8 flex items-center gap-10 sticky bottom-0 z-50 backdrop-blur-2xl shadow-[0_-10px_20px_rgba(6,182,212,0.1)]">
       <audio
         ref={audioRef}
         src={currentTrack.url}

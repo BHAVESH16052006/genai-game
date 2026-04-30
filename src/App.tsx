@@ -33,15 +33,23 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col overflow-hidden font-sans selection:bg-cyan-500/30">
+      {/* Immersive Background Glows */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-900/10 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-fuchsia-900/10 rounded-full blur-[150px] animate-pulse delay-700"></div>
+        <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-purple-900/5 rounded-full blur-[100px]"></div>
+      </div>
+
       {/* Header */}
       <header className="flex items-center justify-between px-8 py-6 bg-slate-900/50 border-b border-cyan-500/20 backdrop-blur-md sticky top-0 z-50">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-cyan-500 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.5)]">
-            <Music className="w-6 h-6 text-white" strokeWidth={2.5} />
-          </div>
-          <h1 className="text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500 uppercase">
-            SynthSnake.AI
+        <div className="flex flex-col">
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-pink-500 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)] italic">
+            NEON BEATS
           </h1>
+          <div className="flex items-center gap-2 text-cyan-400/60 font-mono text-[10px] uppercase tracking-[0.4em] mt-1 pr-4 border-r border-white/10 w-fit">
+            <Zap className="w-3 h-3 text-cyan-400 fill-cyan-400 animate-pulse" />
+            <span>Neural Sync Active</span>
+          </div>
         </div>
         
         <div className="flex items-center gap-8">
@@ -85,23 +93,23 @@ export default function App() {
 
         {/* Sidebar */}
         <aside className="w-85 flex flex-col gap-6">
-          <div className="bg-slate-900/60 rounded-3xl p-6 border border-white/5 flex flex-col gap-4">
-            <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+          <div className="bg-slate-900/60 rounded-3xl p-6 border border-cyan-500/20 shadow-[0_0_20px_rgba(6,182,212,0.1)] flex flex-col gap-4">
+            <h2 className="text-xs font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
               <Keyboard className="w-4 h-4" /> Interface
             </h2>
             <div className="grid grid-cols-2 gap-2">
-              <div className="p-3 rounded-2xl bg-white/5 border border-white/10 flex flex-col items-center gap-1">
+              <div className="p-3 rounded-2xl bg-white/5 border border-white/10 flex flex-col items-center gap-1 shadow-inner group transition-colors hover:border-cyan-500/30">
                 <span className="text-[10px] text-slate-500 font-bold tracking-tighter">NAVIGATE</span>
-                <span className="text-sm font-black text-cyan-400 uppercase">WASD</span>
+                <span className="text-sm font-black text-white group-hover:text-cyan-400 transition-colors uppercase">WASD</span>
               </div>
-              <div className="p-3 rounded-2xl bg-white/5 border border-white/10 flex flex-col items-center gap-1">
+              <div className="p-3 rounded-2xl bg-white/5 border border-white/10 flex flex-col items-center gap-1 shadow-inner group transition-colors hover:border-fuchsia-500/30">
                 <span className="text-[10px] text-slate-500 font-bold tracking-tighter">HALT</span>
-                <span className="text-sm font-black text-fuchsia-400 uppercase">SPACE</span>
+                <span className="text-sm font-black text-white group-hover:text-fuchsia-400 transition-colors uppercase">SPACE</span>
               </div>
             </div>
           </div>
 
-          <div className="bg-slate-900/60 rounded-3xl p-6 border border-white/5 flex-1 relative overflow-hidden group">
+          <div className="bg-slate-900/60 rounded-3xl p-6 border border-fuchsia-500/20 shadow-[0_0_20px_rgba(217,70,239,0.1)] flex-1 relative overflow-hidden group">
             <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent pointer-events-none"></div>
             <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Neural Data</h2>
             <div className="space-y-4">

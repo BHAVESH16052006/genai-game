@@ -18,10 +18,20 @@ const SnakeGame: React.FC<SnakeGameProps> = ({ onScoreUpdate, onGameOver, isPlay
   const [isPaused, setIsPaused] = useState(true);
   const [score, setScore] = useState(0);
   const [speed, setSpeed] = useState(INITIAL_SPEED);
+  const [blink, setBlink] = useState(true);
   
   // Use a ref to track direction changes within a single tick
   const nextDirectionRef = useRef<Direction>('RIGHT');
   const lastProcessedDirectionRef = useRef<Direction>('RIGHT');
+
+  // Blink effect loop
+  useEffect(() => {
+    if (isPaused) return;
+    const interval = setInterval(() => {
+      setBlink(b => !b);
+    }, 400);
+    return () => clearInterval(interval);
+  }, [isPaused]);
 
   const moveSnake = useCallback(() => {
     setSnake((prevSnake) => {
@@ -102,27 +112,27 @@ const SnakeGame: React.FC<SnakeGameProps> = ({ onScoreUpdate, onGameOver, isPlay
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      const currentDir = lastProcessedDirectionRef.current;
+      const queuedDir = nextDirectionRef.current;
       switch (e.key) {
         case 'ArrowUp':
         case 'w':
         case 'W':
-          if (currentDir !== 'DOWN') nextDirectionRef.current = 'UP';
+          if (queuedDir !== 'DOWN') nextDirectionRef.current = 'UP';
           break;
         case 'ArrowDown':
         case 's':
         case 'S':
-          if (currentDir !== 'UP') nextDirectionRef.current = 'DOWN';
+          if (queuedDir !== 'UP') nextDirectionRef.current = 'DOWN';
           break;
         case 'ArrowLeft':
         case 'a':
         case 'A':
-          if (currentDir !== 'RIGHT') nextDirectionRef.current = 'LEFT';
+          if (queuedDir !== 'RIGHT') nextDirectionRef.current = 'LEFT';
           break;
         case 'ArrowRight':
         case 'd':
         case 'D':
-          if (currentDir !== 'LEFT') nextDirectionRef.current = 'RIGHT';
+          if (queuedDir !== 'LEFT') nextDirectionRef.current = 'RIGHT';
           break;
         case ' ':
           setIsPaused(p => !p);
@@ -174,17 +184,29 @@ const SnakeGame: React.FC<SnakeGameProps> = ({ onScoreUpdate, onGameOver, isPlay
         (segment.y + 1) * cellSize
       );
       
-      if (index === 0) {
-        gradient.addColorStop(0, '#22d3ee');
-        gradient.addColorStop(1, '#06b6d4');
+      const isHead = index === 0;
+      const baseBlue = '#22d3ee';
+      const basePink = '#d946ef';
+      
+      // Snake uses Neon Blue
+      if (isHead) {
+        gradient.addColorStop(0, '#00f2ff');
+        gradient.addColorStop(1, '#0066ff');
         ctx.shadowBlur = 20;
-        ctx.shadowColor = '#22d3ee';
+        ctx.shadowColor = baseBlue;
       } else {
-        const opacity = Math.max(0.2, 1 - (index / snake.length));
-        gradient.addColorStop(0, `rgba(34, 211, 238, ${opacity})`);
-        gradient.addColorStop(1, `rgba(13, 148, 136, ${opacity})`);
-        ctx.shadowBlur = 5;
-        ctx.shadowColor = 'rgba(34, 211, 238, 0.3)';
+        const opacity = Math.max(0.1, 1 - (index / snake.length));
+        // Alternate colors if blinking or just use blue
+        if (blink && index % 2 === 0) {
+          gradient.addColorStop(0, `rgba(217, 70, 239, ${opacity})`);
+          gradient.addColorStop(1, `rgba(162, 28, 175, ${opacity})`);
+          ctx.shadowColor = basePink;
+        } else {
+          gradient.addColorStop(0, `rgba(34, 211, 238, ${opacity})`);
+          gradient.addColorStop(1, `rgba(6, 182, 212, ${opacity})`);
+          ctx.shadowColor = baseBlue;
+        }
+        ctx.shadowBlur = blink ? 10 : 5;
       }
       
       ctx.fillStyle = gradient;
@@ -193,7 +215,7 @@ const SnakeGame: React.FC<SnakeGameProps> = ({ onScoreUpdate, onGameOver, isPlay
       const size = cellSize - 3;
       
       ctx.beginPath();
-      ctx.roundRect(x, y, size, size, 3);
+      ctx.roundRect(x, y, size, size, isHead ? 4 : 2);
       ctx.fill();
     });
 
@@ -215,7 +237,7 @@ const SnakeGame: React.FC<SnakeGameProps> = ({ onScoreUpdate, onGameOver, isPlay
     
     // Reset shadow for next frame
     ctx.shadowBlur = 0;
-  }, [snake, food]);
+  }, [snake, food, blink]);
 
   return (
     <div className="relative group">
