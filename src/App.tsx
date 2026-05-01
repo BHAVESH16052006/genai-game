@@ -18,18 +18,21 @@ export default function App() {
   });
   const [isGameOver, setIsGameOver] = useState(false);
 
-  const handleScoreUpdate = (newScore: number) => {
+  const handleScoreUpdate = React.useCallback((newScore: number) => {
     setScore(newScore);
-    if (newScore > highScore) {
-      setHighScore(newScore);
-      localStorage.setItem('neon-snake-high-score', newScore.toString());
-    }
-  };
+    setHighScore(prev => {
+      if (newScore > prev) {
+        localStorage.setItem('neon-snake-high-score', newScore.toString());
+        return newScore;
+      }
+      return prev;
+    });
+  }, []);
 
-  const handleGameOver = (finalScore: number) => {
+  const handleGameOver = React.useCallback((finalScore: number) => {
     setIsGameOver(true);
     setTimeout(() => setIsGameOver(false), 3000);
-  };
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col overflow-hidden font-sans selection:bg-cyan-500/30">
@@ -105,6 +108,10 @@ export default function App() {
               <div className="p-3 rounded-2xl bg-white/5 border border-white/10 flex flex-col items-center gap-1 shadow-inner group transition-colors hover:border-fuchsia-500/30">
                 <span className="text-[10px] text-slate-500 font-bold tracking-tighter">HALT</span>
                 <span className="text-sm font-black text-white group-hover:text-fuchsia-400 transition-colors uppercase">SPACE</span>
+              </div>
+              <div className="p-3 rounded-2xl bg-white/5 border border-white/10 flex flex-col items-center gap-1 shadow-inner group transition-colors hover:border-pink-500/30 col-span-2">
+                <span className="text-[10px] text-slate-500 font-bold tracking-tighter">NEURAL FOCUS (SLOW-MO)</span>
+                <span className="text-sm font-black text-white group-hover:text-pink-400 transition-colors uppercase">HOLD SHIFT</span>
               </div>
             </div>
           </div>
